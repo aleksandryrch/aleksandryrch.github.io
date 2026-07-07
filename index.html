@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aleksandr.yrch — Roblox Systems Scripter · For Hire</title>
+<meta name="description" content="Roblox systems scripter for hire. Data, monetization, gameplay & server-side fixes. Case study: took a live game from 3 FPS with active backdoors to 60 FPS, secured, and monetizing.">
+<style>
+  :root {
+    --bg: #E9ECF0; --panel: #FFFFFF; --panel-2: #F3F5F8; --ink: #191F27;
+    --muted: #58616D; --faint: #8B94A0; --line: #D3D9E1; --line-strong: #BFC7D1;
+    --accent: #D98A15; --accent-ink: #7A4E06; --accent-soft: #F6E4C4;
+    --good: #2E9E6B; --good-soft: #DDF0E6; --bad: #C6483F; --bad-soft: #F6DEDB;
+    --shadow: 0 1px 2px rgba(20,28,40,.06), 0 8px 30px rgba(20,28,40,.06);
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0E1219; --panel: #151B24; --panel-2: #10151D; --ink: #DCE3EC;
+      --muted: #939DAA; --faint: #67707D; --line: #232B37; --line-strong: #313B49;
+      --accent: #F2A93B; --accent-ink: #F7C877; --accent-soft: #2A2113;
+      --good: #43B581; --good-soft: #16261F; --bad: #E0605A; --bad-soft: #2A1715;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 12px 40px rgba(0,0,0,.35);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; line-height: 1.6;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; background: var(--accent); display: inline-block; flex: none; }
+  .num { font-variant-numeric: tabular-nums; }
+  .topbar { border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 82%, transparent);
+    position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .brand { font-family: var(--mono); font-weight: 700; letter-spacing: .02em; font-size: 15px; }
+  .brand span { color: var(--accent); }
+  .status { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--good); display: inline-flex; align-items: center; gap: 8px; }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px var(--good-soft); }
+  .hero { padding: 72px 0 40px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.02; letter-spacing: -.03em; font-weight: 800;
+    margin: 20px 0 0; text-wrap: balance; max-width: 15ch; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { color: var(--muted); font-size: clamp(16px, 2.1vw, 19px); max-width: 60ch; margin: 22px 0 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; align-items: center; }
+  .btn { font-family: var(--mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+    text-decoration: none; padding: 13px 20px; border: 1px solid transparent; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 9px; }
+  .btn-primary { background: var(--accent); color: #17120A; font-weight: 700; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent-ink); }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 46px;
+    background: var(--line); border: 1px solid var(--line); }
+  .strip .cell { background: var(--panel); padding: 20px 22px; }
+  .strip .k { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+  .strip .v { font-size: clamp(24px, 4vw, 34px); font-weight: 800; letter-spacing: -.02em; margin-top: 8px; }
+  .strip .v .to { color: var(--faint); font-weight: 500; margin: 0 6px; }
+  .strip .v .after { color: var(--good); }
+  .strip .sub { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 4px; }
+  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  h2 { font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -.02em; font-weight: 800; margin: 14px 0 0; }
+  .sec-note { color: var(--muted); max-width: 62ch; margin: 12px 0 0; }
+  .results { margin-top: 30px; border: 1px solid var(--line); background: var(--panel); }
+  .row { display: grid; grid-template-columns: 1.4fr auto 1.4fr; align-items: center; gap: 18px;
+    padding: 16px 20px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row .label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .ba { display: flex; align-items: center; gap: 14px; justify-content: flex-end; }
+  .pill { font-family: var(--mono); font-weight: 700; font-size: 14px; padding: 5px 11px;
+    display: inline-flex; align-items: center; white-space: nowrap; }
+  .pill.before { background: var(--bad-soft); color: var(--bad); }
+  .pill.after { background: var(--good-soft); color: var(--good); }
+  .arrow { color: var(--faint); font-family: var(--mono); }
+  .bars { display: flex; flex-direction: column; gap: 7px; }
+  .bar { height: 8px; background: var(--panel-2); position: relative; overflow: hidden; }
+  .bar > span { position: absolute; inset: 0 auto 0 0; }
+  .bar.b > span { background: var(--bad); }
+  .bar.a > span { background: var(--good); }
+  .callout { margin-top: 26px; border: 1px solid var(--line-strong); background: var(--panel-2);
+    padding: 22px 24px; border-left: 3px solid var(--accent); }
+  .callout .q { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-ink); }
+  .callout p { margin: 10px 0 0; font-size: 16px; }
+  .callout strong { color: var(--ink); }
+  .proj { margin-top: 28px; border: 1px solid var(--line); background: var(--panel); }
+  .proj-body { padding: 24px; }
+  .proj h3 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+  .proj h3 a { color: var(--ink); text-decoration: none; }
+  .proj h3 a:hover { color: var(--accent-ink); }
+  .proj p { color: var(--muted); margin: 10px 0 0; max-width: 60ch; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line-strong); padding: 5px 9px; }
+  .proj-link { font-family: var(--mono); font-size: 13px; color: var(--accent-ink); text-decoration: none;
+    border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+  .feature { margin-top: 28px; border: 1px solid var(--accent); background: var(--panel); box-shadow: var(--shadow);
+    padding: 24px; display: grid; gap: 6px; grid-template-columns: 1fr auto; align-items: start; }
+  .feature .ftag { grid-column: 1 / -1; }
+  .feature h3 { margin: 4px 0 0; font-size: 21px; letter-spacing: -.01em; }
+  .feature p { color: var(--muted); margin: 8px 0 0; max-width: 52ch; grid-column: 1; }
+  .feature .price { text-align: right; }
+  .table-scroll { margin-top: 24px; overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; min-width: 460px; }
+  thead th { text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--faint); padding: 14px 20px; font-weight: 600; border-bottom: 1px solid var(--line-strong); }
+  thead th.right, td.price { text-align: right; }
+  tbody td { padding: 15px 20px; border-top: 1px solid var(--line); vertical-align: top; }
+  tbody tr:first-child td { border-top: 0; }
+  .svc { font-weight: 650; }
+  .svc small { display: block; font-weight: 400; color: var(--muted); margin-top: 3px; font-size: 13.5px; }
+  td.price { font-family: var(--mono); font-weight: 700; white-space: nowrap; color: var(--ink); font-variant-numeric: tabular-nums; }
+  td.price .from { color: var(--faint); font-weight: 500; font-size: 12px; display: block; }
+  .terms { margin-top: 24px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .term { background: var(--panel); padding: 20px 22px; }
+  .term .t { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+  .term .d { margin-top: 8px; font-size: 15px; }
+  .term .d b { font-weight: 700; }
+  .contact { padding: 60px 0 72px; text-align: left; }
+  .contact h2 { max-width: 20ch; }
+  .contact .lede { margin-top: 14px; }
+  .foot { padding: 22px 0 40px; }
+  .foot .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .04em; }
+  @media (max-width: 720px) {
+    .strip { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr; gap: 10px; }
+    .ba { justify-content: flex-start; }
+    .row .bars { order: 3; }
+    .terms { grid-template-columns: 1fr; }
+    .feature { grid-template-columns: 1fr; }
+    .feature .price { text-align: left; }
+    .hero { padding: 48px 0 34px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">aleksandr<span>.</span>yrch</div>
+    <div class="status"><span class="dot"></span>Open for work</div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Roblox systems scripter — for hire</div>
+    <h1>I build and fix the systems a game <em>runs on.</em></h1>
+    <p class="lede">Data, monetization, gameplay, and the server-side plumbing that has to just work. My proof isn't a skills list — it's a full game I shipped solo, and a live one I pulled out of the fire.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#contact">Tell me what you're building</a>
+      <a class="btn btn-ghost" href="#work">See the results</a>
+    </div>
+    <div class="strip" id="work">
+      <div class="cell">
+        <div class="k">Client FPS</div>
+        <div class="v num">3<span class="to">→</span><span class="after">60</span></div>
+        <div class="sub">same game, one fix pass</div>
+      </div>
+      <div class="cell">
+        <div class="k">Hidden backdoors</div>
+        <div class="v num">2<span class="to">·</span><span class="after">removed</span></div>
+        <div class="sub">running code on the server</div>
+      </div>
+      <div class="cell">
+        <div class="k">Robux purchases</div>
+        <div class="v"><span class="after">restored</span></div>
+        <div class="sub">were granting nothing</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Case file — live military-RP rescue</div>
+        <h2>Barely playable → shipped-ready, in one engagement.</h2>
+      </div>
+    </div>
+    <p class="sec-note">Brought in to audit and fix a live game that was collapsing under its own weight. Static analysis plus live profiling, delivered with a written report at every stage — not a black box.</p>
+    <div class="results">
+      <div class="row">
+        <div class="label">In-game framerate</div>
+        <div class="bars">
+          <div class="bar b"><span style="width:5%"></span></div>
+          <div class="bar a"><span style="width:100%"></span></div>
+        </div>
+        <div class="ba"><span class="pill before num">3 FPS</span><span class="arrow">→</span><span class="pill after num">60 FPS</span></div>
+      </div>
+      <div class="row">
+        <div class="label">Server physics rate</div>
+        <div class="bars">
+          <div class="bar b"><span style="width:3%"></span></div>
+          <div class="bar a"><span style="width:100%"></span></div>
+        </div>
+        <div class="ba"><span class="pill before num">0.3 steps/s</span><span class="arrow">→</span><span class="pill after num">~60 steps/s</span></div>
+      </div>
+      <div class="row">
+        <div class="label">Hidden backdoors</div>
+        <div class="bars"><div class="bar b"><span style="width:100%"></span></div></div>
+        <div class="ba"><span class="pill before">2 active</span><span class="arrow">→</span><span class="pill after">found &amp; removed</span></div>
+      </div>
+      <div class="row">
+        <div class="label">Robux monetization</div>
+        <div class="bars"><div class="bar b"><span style="width:100%"></span></div></div>
+        <div class="ba"><span class="pill before">granting $0</span><span class="arrow">→</span><span class="pill after">working</span></div>
+      </div>
+      <div class="row">
+        <div class="label">Server-side exploits closed</div>
+        <div class="bars"><div class="bar a"><span style="width:100%"></span></div></div>
+        <div class="ba"><span class="pill after">faction bypass · remote kill · infinite-jail arrest</span></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="q">// on the two backdoors</div>
+      <p>Two scripts were running <strong>third-party code on the server</strong> — hidden inside toolbox models, real code buried under blank space with fake "anti-exploit" names and "don't delete me" comments. <strong>Finding them is the job. Deleting them is five lines.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Shipped solo — live now</div>
+    <h2>Chaos Protocol Tycoon</h2>
+    <div class="proj">
+      <div class="proj-body">
+        <h3><a href="https://www.roblox.com/games/123010733244333/Chaos-Protocol-Tycoon" target="_blank" rel="noopener">Chaos Protocol Tycoon ↗</a></h3>
+        <p>A full tycoon I built and shipped by myself — the whole stack, start to finish. Best experienced on PC.</p>
+        <div class="tags">
+          <span class="tag">Persistent data</span>
+          <span class="tag">Working monetization</span>
+          <span class="tag">AI entity</span>
+          <span class="tag">37-preset dynamic weather</span>
+        </div>
+        <p style="margin-top:18px"><a class="proj-link" href="https://www.roblox.com/games/123010733244333/Chaos-Protocol-Tycoon" target="_blank" rel="noopener">Play it on Roblox</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">What I do — starting prices</div>
+    <h2>Scoped work, priced up front.</h2>
+    <p class="sec-note">Prices are starting points and scale with complexity. Tell me the scope and I'll give you a firm number before any work begins.</p>
+    <div class="feature">
+      <div class="ftag eyebrow">Flagship — proven on the case above</div>
+      <h3>Audit &amp; Rescue</h3>
+      <div class="price"><span class="pill after num" style="font-size:15px">from&nbsp;$60</span></div>
+      <p>Performance, memory, security and exploit audit of a live or half-finished game — with the fixes, and a written report you keep. This is the work that took the game above from 3 FPS and two backdoors to shipped-ready.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Service</th><th class="right">Starting price</th></tr></thead>
+        <tbody>
+          <tr><td class="svc">DataStore &amp; data architecture<small>Primary + backup, session-lock, validate / repair</small></td><td class="price"><span class="from">from</span>$40</td></tr>
+          <tr><td class="svc">Monetization<small>Gamepasses, dev products, ProcessReceipt</small></td><td class="price"><span class="from">from</span>$40</td></tr>
+          <tr><td class="svc">Gameplay systems<small>Tycoons, quests, progression, shops</small></td><td class="price"><span class="from">from</span>$50</td></tr>
+          <tr><td class="svc">AI / NPC behavior<small>State machines, pathing, combat logic</small></td><td class="price"><span class="from">from</span>$50</td></tr>
+          <tr><td class="svc">UI systems<small>HUDs, menus, responsive layouts</small></td><td class="price"><span class="from">from</span>$25</td></tr>
+          <tr><td class="svc">Debugging &amp; finishing features<small>Fix what's broken, complete what's half-built</small></td><td class="price"><span class="from">from</span>$30</td></tr>
+          <tr><td class="svc">Larger systems or full builds<small>Multi-system work, end-to-end</small></td><td class="price">Negotiable</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Terms</div>
+    <h2>How it works.</h2>
+    <div class="terms">
+      <div class="term"><div class="t">Payment</div><div class="d"><b>Up front, before work starts.</b> Scope agreed and priced first — no surprises.</div></div>
+      <div class="term"><div class="t">Currency</div><div class="d"><b>USD only</b> — PayPal, Wise, or crypto. No Robux, no rev-share.</div></div>
+      <div class="term"><div class="t">Pricing</div><div class="d">Starting points that <b>scale with complexity and scope.</b> You get a firm quote before I begin.</div></div>
+      <div class="term"><div class="t">Straight answers</div><div class="d">I'll tell you honestly if it's something I can help with — and how I'd approach it — before you commit.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="eyebrow">Get in touch</div>
+    <h2>Tell me what you're building.</h2>
+    <p class="lede">Send me what you're making, your current stage, and what still needs work. You'll get an honest read on whether I can help and how I'd tackle it.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#">DM: @aleksandr.yrch</a>
+      <a class="btn btn-ghost" href="https://www.roblox.com/games/123010733244333/Chaos-Protocol-Tycoon" target="_blank" rel="noopener">View live game</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>aleksandr.yrch — Roblox systems scripter</span>
+    <span>Full audit report &amp; before/after captures available on request</span>
+  </div>
+</footer>
+
+</body>
+</html>
