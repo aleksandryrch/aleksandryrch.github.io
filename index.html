@@ -70,6 +70,7 @@ td:first-child{color:var(--dim)}
 
 figure{margin:0 0 6px}
 figure img{width:100%;display:block;border:1px solid var(--line);border-radius:10px;background:#000}
+video{width:100%;display:block;border:1px solid var(--line2);border-radius:10px;background:#000}
 figcaption{font:12.5px/1.5 var(--sans);color:var(--dim2);padding:9px 2px 18px}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .note{border-left:2px solid var(--warn);background:rgba(240,180,41,.05);padding:12px 16px;
@@ -257,7 +258,62 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 04 · How I build</div>
+    <div class="eyebrow">Case 04 · Speed</div>
+    <h2>Six core systems for a dig simulator, in one day</h2>
+    <p class="sub">A commission for a digging and museum game. Eleven systems were scoped out of an
+      eighteen system spec. These six were built, wired together and running in a single day.</p>
+
+    <div class="case">
+      <div class="case-h">
+        <h3>All six running, one take</h3>
+        <span class="tag">Data</span><span class="tag">Economy</span><span class="tag">Gameplay</span><span class="tag">Config driven</span>
+      </div>
+      <div class="case-b">
+        <video controls preload="none" playsinline poster="img/dig-poster.jpg">
+          <source src="media/dig-demo.mp4" type="video/mp4">
+        </video>
+        <figcaption>56 seconds, no cuts: buy a shovel, dig, unlock the next site, hit a site you can't afford yet.</figcaption>
+
+        <p><strong>Everything here is decided on the server. The client sends one thing, where it clicked.</strong></p>
+        <ul>
+          <li><strong>Player data.</strong> One service owns the DataStore and nothing else touches it. Session
+            lock so two servers can never write the same profile, write queue with retry and backoff, autosave
+            plus save on exit and on every purchase, BindToClose so a shutdown doesn't eat the last few minutes.
+            If the store still refuses after every retry the player gets removed instead of an empty profile to
+            spend from.</li>
+          <li><strong>Currency.</strong> Every balance change goes through one function with a reason string in
+            the log. The client only draws the number.</li>
+          <li><strong>Shovels.</strong> Five tiers. Dig radius, depth per swing, cooldown and price all live in a
+            config module, so rebalancing needs no code change.</li>
+          <li><strong>Excavation areas.</strong> Four dig sites, each gated behind money and a shovel
+            requirement, bounds and loot tables from config.</li>
+          <li><strong>Ground depth.</strong> The map is a grid of cells and each cell keeps its own depth and
+            layer. Depth belongs to the ground, not to the player, so a hole one player dug is still there for
+            the next one. Cells only regrow when nobody is digging in them or standing on them.</li>
+          <li><strong>Digging.</strong> Ties shovel, area and depth together. Reach, cooldown, area bounds and
+            every result are checked on the server before anything happens.</li>
+        </ul>
+
+        <div class="shots">
+          <figure><img src="img/dig-shovels.jpg" alt="Shovel shop with five tiers, one equipped, two locked"><figcaption>Five shovel tiers. Prices, dig radius, depth per swing and cooldown all come from config, not from code.</figcaption></figure>
+          <figure><img src="img/dig-depth.jpg" alt="Player standing in a hole dug several layers deep"><figcaption>Depth is stored per grid cell on the server. The hole stays after you walk away.</figcaption></figure>
+          <figure><img src="img/dig-area-unlock.jpg" alt="Forgotten Temple unlocked notification"><figcaption>Site unlocked. The server checks money and shovel tier, the client just gets told.</figcaption></figure>
+          <figure><img src="img/dig-area-locked.jpg" alt="Royal Tomb, not enough money"><figcaption>And refuses when you can't afford it, whatever the client claims.</figcaption></figure>
+        </div>
+
+        <div class="note"><strong>One bug worth showing.</strong> Only the first area could be dug. The area slabs
+          had been moved by hand in Studio, but the config the server checks against still held the old
+          coordinates, so clicks on visible ground landed outside the server's idea of the area and were refused
+          with nothing on screen to explain it. I aligned the config to the world and added a boot time warning
+          that fires whenever a slab and its config drift apart, so the same silence can't happen twice.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Case 05 · How I build</div>
     <h2>A simulator I'm building now</h2>
     <p class="sub">In development. It's here because it shows how I structure a project when nobody hands me
       ten years of legacy code.</p>
