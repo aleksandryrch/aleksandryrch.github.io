@@ -73,6 +73,11 @@ figure img{width:100%;display:block;border:1px solid var(--line);border-radius:1
 video{width:100%;display:block;border:1px solid var(--line2);border-radius:10px;background:#000}
 figcaption{font:12.5px/1.5 var(--sans);color:var(--dim2);padding:9px 2px 18px}
 .shots{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+pre{background:#0e1013;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  overflow-x:auto;margin-bottom:14px}
+pre code{font:13px/1.6 var(--mono);color:var(--dim);white-space:pre}
+code{font:13px/1.4 var(--mono);color:var(--text);background:rgba(255,255,255,.05);
+  padding:1px 5px;border-radius:4px}
 .note{border-left:2px solid var(--warn);background:rgba(240,180,41,.05);padding:12px 16px;
   border-radius:0 8px 8px 0;font-size:14.5px;color:var(--dim);margin-bottom:6px}
 
@@ -313,7 +318,71 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 05 · How I build</div>
+    <div class="eyebrow">Case 05 · Tooling</div>
+    <h2>A scanner for the exploit nobody scans for</h2>
+    <p class="sub">Backdoor scanners look for someone else's code. This one looks for missing checks in
+      yours. I wrote it, ran it on my own published game, and it found two real holes I had shipped.</p>
+
+    <div class="case">
+      <div class="case-h">
+        <h3>Remote Audit</h3>
+        <span class="tag">Security</span><span class="tag">Static analysis</span><span class="tag">Studio plugin</span><span class="tag">Free</span>
+      </div>
+      <div class="case-b">
+        <p><strong>The whole problem in five lines:</strong></p>
+        <pre><code>DamageRemote.OnServerEvent:Connect(function(player, target, amount)
+    target.Humanoid:TakeDamage(amount)
+end)</code></pre>
+        <p>The client picks both arguments. An exploiter sends any character and any number and kills
+          anyone from anywhere. There is no obfuscation here, no <code>loadstring</code>, no foreign
+          <code>require</code>. It is the developer's own code and it reads completely normal, which is
+          exactly why every backdoor scanner walks straight past it.</p>
+
+        <p><strong>What the plugin does.</strong> It reads server scripts, finds every
+          <code>OnServerEvent</code>, <code>OnServerInvoke</code> and Knit client method, and for each
+          client argument asks one question: does anything check this before it reaches something that
+          matters. Damage, currency, DataStore writes, cloning, destroying, teleports, purchases. If the
+          answer is no, you get the remote name, the file, the line, and one sentence on what is missing.</p>
+
+        <ul>
+          <li><strong>Comments and strings are stripped first,</strong> byte for byte, so no finding can
+            ever come from a line of commented out code. That single step is the difference between a tool
+            people keep and one they uninstall.</li>
+          <li><strong>Checks are demanded by usage.</strong> A string argument is never accused of missing
+            a numeric range it does not need.</li>
+          <li><strong>It follows the argument one level into local helpers,</strong> in both directions, so
+            validation living in a helper counts for the caller and a thin wrapper is not blamed for its
+            own helper's sink.</li>
+          <li><strong>A fully validated handler produces no row at all.</strong> Not a green line, nothing.
+            The report is meant to be short enough to act on.</li>
+        </ul>
+
+        <p><strong>Run on Chaos Protocol Tycoon:</strong> 72 scripts, 75 handlers, 6 findings.</p>
+        <ul>
+          <li>A lasso item let any player ragdoll any other player, anywhere on the map.</li>
+          <li>The same item could freeze a chosen player for 120 seconds from across the world.</li>
+          <li>A class value written straight from the client with no type check.</li>
+          <li>A purchase path with no rate limit around it.</li>
+        </ul>
+
+        <div class="note"><strong>Straight with you:</strong> the first working version found ten things and
+          four of them were noise, so I cut those categories out entirely. They were not wrong, they were
+          just things nobody would ever go fix, and they buried the three that mattered. Everything the tool
+          reports is worded as an observation, not a verdict. It is lexical analysis, so metatables and
+          dynamic indexing are outside what it can see, and a check written after the dangerous line still
+          counts as a check. Both are deliberate trades in favour of staying quiet.</div>
+
+        <p>Verified against two fixtures before it went anywhere near real code: six planted holes, all six
+          found, and six correct handlers plus three traps with a remote handler hidden in a comment, a
+          string and a long bracket block. Zero findings on that one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Case 06 · How I build</div>
     <h2>A simulator I'm building now</h2>
     <p class="sub">In development. It's here because it shows how I structure a project when nobody hands me
       ten years of legacy code.</p>
@@ -366,14 +435,14 @@ footer a{font-weight:600}
     <h2>What things cost</h2>
     <p class="sub">Fixed price, agreed in writing before I start. If the job turns out smaller than I quoted,
       you pay the smaller number.</p>
-    <div class="price"><div><b>Bug fix</b><small>One clear bug, reproduced and fixed</small></div><em>from $25</em></div>
-    <div class="price"><div><b>UI system</b><small>Menus, HUD, shop and inventory screens</small></div><em>from $40</em></div>
-    <div class="price"><div><b>Monetization</b><small>Gamepasses, developer products, receipt handling</small></div><em>from $50</em></div>
-    <div class="price"><div><b>Data and saving</b><small>ProfileService or custom, session locks, migrations</small></div><em>from $70</em></div>
-    <div class="price"><div><b>Gameplay system</b><small>Combat, progression, tycoon loop, NPC behaviour</small></div><em>from $70</em></div>
-    <div class="price"><div><b>Performance audit and fix</b><small>Profiled properly, with a written report</small></div><em>from $90</em></div>
-    <div class="price"><div><b>Security audit</b><small>Backdoors, exploits, remote validation, written report</small></div><em>from $100</em></div>
-    <div class="price"><div><b>Full build</b><small>Scoped per project after we talk</small></div><em>from $200</em></div>
+    <div class="price"><div><b>Bug fix</b><small>One clear bug, reproduced and fixed</small></div><em>from $15</em></div>
+    <div class="price"><div><b>UI system</b><small>Menus, HUD, shop and inventory screens</small></div><em>from $25</em></div>
+    <div class="price"><div><b>Monetization</b><small>Gamepasses, developer products, receipt handling</small></div><em>from $30</em></div>
+    <div class="price"><div><b>Data and saving</b><small>ProfileService or custom, session locks, migrations</small></div><em>from $40</em></div>
+    <div class="price"><div><b>Gameplay system</b><small>Combat, progression, tycoon loop, NPC behaviour</small></div><em>from $40</em></div>
+    <div class="price"><div><b>Performance audit and fix</b><small>Profiled properly, with a written report</small></div><em>from $55</em></div>
+    <div class="price"><div><b>Security audit</b><small>Backdoors, exploits, remote validation, written report</small></div><em>from $60</em></div>
+    <div class="price"><div><b>Full build</b><small>Scoped per project after we talk</small></div><em>from $120</em></div>
   </div>
 </section>
 
@@ -404,9 +473,10 @@ footer a{font-weight:600}
       <div><b>Roblox</b><a href="https://www.roblox.com/users/3204366457/profile" target="_blank" rel="noopener">W_Katana</a></div>
     </div>
     <div class="note">
-      <strong>Payment.</strong> USD only, half up front. Card through Payoneer, crypto, or bank transfer.
-      I'm in Ukraine, so PayPal goods and services doesn't reach me, tell me early and we'll pick something that
-      does. Happy to use a middleman for a first job. No Robux, no rev share, no "pay after launch".
+      <strong>Payment.</strong> Per task, paid as each one ships, half up front on the first. Card through
+      Payoneer, crypto, or bank transfer. I'm in Ukraine, so PayPal goods and services doesn't reach me, tell
+      me early and we'll pick something that does. Robux is fine at my rate, roughly 25k per system. Happy to
+      use a middleman for a first job. No rev share, no "pay after launch".
     </div>
   </div>
 </section>
