@@ -382,7 +382,52 @@ end)</code></pre>
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 06 · How I build</div>
+    <div class="eyebrow">Case 06 · Atmosphere</div>
+    <h2>Weather that every server agrees on</h2>
+    <p class="sub">Built as a standalone system and dropped into a blank place, so it can be judged on its
+      own. Thirty-seven presets, one schedule, no client ever deciding what the sky looks like.</p>
+
+    <div class="case">
+      <div class="case-h">
+        <h3>Dynamic Weather System</h3>
+        <span class="tag">Server authority</span><span class="tag">Deterministic</span><span class="tag">Config driven</span><span class="tag">Sound</span>
+      </div>
+      <div class="case-b">
+        <div style="position:relative;padding-bottom:56.25%;height:0;border-radius:10px;overflow:hidden;margin-bottom:10px">
+          <iframe src="https://www.youtube-nocookie.com/embed/ZScB2OIAgiI" title="Dynamic weather system, preset transitions"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <figcaption>Clear into rain into a storm and out to snow, with the active preset named on screen.</figcaption>
+
+        <p><strong>The server owns the schedule and picks the weather. Clients only render it.</strong> No
+          remote asks for a weather change and no client can push one, so two players standing next to each
+          other are never in different storms.</p>
+        <ul>
+          <li><strong>Thirty-seven presets</strong> across clear, rain, snow, fog and storms. Lighting,
+            atmosphere, clouds, particles and layered ambient sound all belong to the preset.</li>
+          <li><strong>A deterministic seven day schedule.</strong> The same day and hour gives the same
+            weather in every running server, so weather can be built into a game's events instead of being
+            random noise on top of them.</li>
+          <li><strong>Everything tweens.</strong> Colour, density, wind, sound volume, all of it crosses over
+            gradually. Nothing snaps, including when a player joins in the middle of a transition.</li>
+          <li><strong>Presets live in a config table.</strong> Adding your own weather is editing data, not
+            touching the transition logic.</li>
+          <li><strong>Sound is built at runtime</strong> from one table and parented last, and the client
+            waits for the group instead of assuming it exists, so a slow load is silence for a second rather
+            than forty four dead references.</li>
+        </ul>
+
+        <div class="note"><strong>Why it's here.</strong> Most of my work lives in other people's games and
+          can only be shown as video. This one I built from scratch in an empty place specifically so the
+          whole thing, running, is something you can watch end to end before hiring me.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Case 07 · How I build</div>
     <h2>A simulator I'm building now</h2>
     <p class="sub">In development. It's here because it shows how I structure a project when nobody hands me
       ten years of legacy code.</p>
