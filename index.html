@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>aleksandr.yrch — Roblox Systems Scripter</title>
+<title>aleksandr.yrch · Roblox Systems Scripter</title>
 <meta name="description" content="Roblox scripter for hire. Performance, security, data and monetization systems. Took a live game from 3 FPS with two backdoors to 63 FPS and clean.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -115,7 +115,7 @@ footer a{font-weight:600}
 <header>
   <div class="wrap">
     <div class="status"><span class="dot"></span>AVAILABLE FOR WORK</div>
-    <h1>I fix the systems your game runs on.<br><span>Data, monetization, security, performance.</span></h1>
+    <h1>I fix the systems your game runs on.<br><span>Data, monetization, security, performance, UI.</span></h1>
     <p class="lead">Roblox scripter. I get called in when a game is live and something is broken,
       slow, or quietly losing money. You get a written report of what I found, not just a patched file.</p>
     <div class="links">
@@ -132,7 +132,7 @@ footer a{font-weight:600}
       <div class="stat"><b>3 → 63</b><span>FPS on a live game, root caused with the profiler</span></div>
       <div class="stat"><b>2</b><span>backdoors found and removed from a client's server</span></div>
       <div class="stat"><b>2881 → 104</b><span>ms worst frame, same game</span></div>
-      <div class="stat"><b>4 mo</b><span>ongoing with that client, still working together</span></div>
+      <div class="stat"><b>4 mo</b><span>on that game, from a broken build to a stable one</span></div>
     </div>
   </div>
 </section>
@@ -205,9 +205,102 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 02 · Build</div>
+    <div class="eyebrow">Case 02 · Ten days</div>
+    <h2>A killer vs survivors horror game, made playable</h2>
+    <p class="sub">The owner had maps, killers and art, but rounds didn't start and half the systems a
+      previous scripter left behind were dead. Ten days later it ran start to finish for the beta.</p>
+
+    <div class="case">
+      <div class="case-h">
+        <h3>Round flow, killers, music, lighting</h3>
+        <span class="tag">Gameplay</span><span class="tag">Round system</span><span class="tag">Audio</span><span class="tag">Bug fixing</span>
+      </div>
+      <div class="case-b">
+        <video controls preload="none" playsinline poster="img/cam-rounds-poster.jpg">
+          <source src="media/cam-rounds.mp4" type="video/mp4">
+        </video>
+        <figcaption>Killer intro on a black fade, then the Last Man Standing banner when one survivor is left.</figcaption>
+
+        <table>
+          <tr><th>Before</th><th>After</th></tr>
+          <tr><td>Rounds never started, the player counter was broken</td><td class="good">Rounds start and end on their own</td></tr>
+          <tr><td>No generators</td><td class="good">4 of 8 spawn points per round, different every time</td></tr>
+          <tr><td>Lighting block from the last scripter did nothing</td><td class="good">Own lighting per map, lobby light restored after</td></tr>
+          <tr><td>Killer leaves, round runs empty to the timer</td><td class="good">Round ends, 4 scenarios tested</td></tr>
+          <tr><td>Beta blocker: nobody got a role or health</td><td class="good">All 14 skins get their role</td></tr>
+          <tr><td>Beta blocker: generator repair cancelled instantly</td><td class="good">4/4 generators flat on the floor, both maps</td></tr>
+        </table>
+
+        <ul>
+          <li><strong>Chase music by distance.</strong> Layers swap as the killer gets closer and lock in during a
+            chase, with a crossfade between 80, 60, 30 and 15 stud bands. Every killer and skin has its own theme.
+            One killer's theme is four layers kept in sync within 0.1 s.</li>
+          <li><strong>Last Man Standing.</strong> Banner, a 1:15 timer, the survivor healed to full, other music
+            muted. Tested down from 3 survivors to 0. The owner's words: "works literally perfect".</li>
+          <li><strong>Killer kits.</strong> A pirate admiral with a flintlock and boarding party minions, and a
+            beast with a roar, a gouge and a stalk into pounce.</li>
+          <li><strong>Spectate, killer intros, XP and gems</strong> with saving, a leaderboard with killer
+            chance, every teleport on a black fade.</li>
+          <li><strong>Other people's bugs.</strong> Invisibility that didn't restore transparency, effects that
+            stopped stacking after a revive, a curse that set speed to zero forever, a spectate button off screen
+            above 900 px.</li>
+        </ul>
+
+        <div class="shots">
+          <figure><img src="img/cam-jim-hud.jpg" alt="Killer ability bar with cooldowns and leaderboard"><figcaption>Ability cooldowns, a status effect card and the killer chance leaderboard.</figcaption></figure>
+          <figure><img src="img/cam-admiral.jpg" alt="Admiral killer mid round with abilities on cooldown"><figcaption>The admiral mid round, flintlock and boarding party on cooldown.</figcaption></figure>
+          <figure><img src="img/cam-generators.jpg" alt="Generator with interact prompt and numbered spawn points"><figcaption>Generator spawn points, numbered for testing, with the repair prompt.</figcaption></figure>
+          <figure><img src="img/cam-spectate.jpg" alt="Spectate menu with arrows"><figcaption>Spectate: who you're watching and which character they play.</figcaption></figure>
+        </div>
+
+        <p>About 3,270 lines across 20 modules, written inside the owner's existing codebase rather than
+          around it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Case 03 · UI</div>
+    <h2>Menus for a medieval fantasy war game</h2>
+    <p class="sub">Team select and main menu, built in Studio and wired up in code. Two directions for the
+      same screen, because the client wanted to see both.</p>
+
+    <div class="case">
+      <div class="case-h">
+        <h3>Team select, main menu</h3>
+        <span class="tag">UI</span><span class="tag">Animation</span><span class="tag">Tweening</span>
+      </div>
+      <div class="case-b">
+        <video controls preload="none" playsinline poster="img/ui-team-fog-poster.jpg">
+          <source src="media/ui-team-fog.mp4" type="video/mp4">
+        </video>
+        <figcaption>The shipped version. Live player count per team, hover states, transitions in and out.</figcaption>
+
+        <video controls preload="none" playsinline poster="img/ui-team-dark-poster.jpg">
+          <source src="media/ui-team-dark.mp4" type="video/mp4">
+        </video>
+        <figcaption>The first direction, dark and gold, with a confirm screen after you pick a side.</figcaption>
+
+        <div class="shots">
+          <figure><img src="img/ui-team-dark.jpg" alt="Team selection screen, dark and gold"><figcaption>Team select, first direction.</figcaption></figure>
+          <figure><img src="img/ui-main-menu.jpg" alt="Main menu with sword logo"><figcaption>Main menu: play, teams, class selection, shop, settings.</figcaption></figure>
+        </div>
+
+        <div class="note"><strong>Straight with you:</strong> I build the screens, the layout, the animation
+          and the code behind them. I don't paint the art: backgrounds and crests in the shipped version are
+          the client's, the frames are CC0. If you need illustrations drawn, that's an artist, not me.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Case 04 · Build</div>
     <h2>Loadout and locker system</h2>
-    <p class="sub">Same client, later job. Players pick a weapon, uniform and tools, save it as a named
+    <p class="sub">Same military RP client as Case 01, later job. Players pick a weapon, uniform and tools, save it as a named
       loadout, and get it back on every spawn.</p>
 
     <div class="case">
@@ -233,7 +326,7 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 03 · Shipped solo</div>
+    <div class="eyebrow">Case 05 · Shipped solo</div>
     <h2>Chaos Protocol Tycoon</h2>
     <p class="sub">A motorcycle tycoon with a horror layer. Built alone, start to finish, and published.</p>
 
@@ -263,7 +356,7 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 04 · Speed</div>
+    <div class="eyebrow">Case 06 · Speed</div>
     <h2>Six core systems for a dig simulator, in one day</h2>
     <p class="sub">A commission for a digging and museum game. Eleven systems were scoped out of an
       eighteen system spec. These six were built, wired together and running in a single day.</p>
@@ -318,7 +411,7 @@ footer a{font-weight:600}
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 05 · Tooling</div>
+    <div class="eyebrow">Case 07 · Tooling</div>
     <h2>A scanner for the exploit nobody scans for</h2>
     <p class="sub">Backdoor scanners look for someone else's code. This one looks for missing checks in
       yours. I wrote it, ran it on my own published game, and it found two real holes I had shipped.</p>
@@ -382,7 +475,7 @@ end)</code></pre>
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 06 · Atmosphere</div>
+    <div class="eyebrow">Case 08 · Atmosphere</div>
     <h2>Weather that every server agrees on</h2>
     <p class="sub">Built as a standalone system and dropped into a blank place, so it can be judged on its
       own. Thirty-seven presets, one schedule, no client ever deciding what the sky looks like.</p>
@@ -427,7 +520,7 @@ end)</code></pre>
 
 <section>
   <div class="wrap">
-    <div class="eyebrow">Case 07 · How I build</div>
+    <div class="eyebrow">Case 09 · How I build</div>
     <h2>A simulator I'm building now</h2>
     <p class="sub">In development. It's here because it shows how I structure a project when nobody hands me
       ten years of legacy code.</p>
@@ -499,7 +592,7 @@ end)</code></pre>
       <li>You tell me what's wrong or what you want. I ask two or three questions.</li>
       <li>I give you an honest read: small fix, big job, or "you don't need to pay anyone for this". That part is free.</li>
       <li>Fixed price and scope in writing before anything starts.</li>
-      <li>Half up front, the rest before I hand the files over.</li>
+      <li>Small jobs paid up front, bigger ones half up front. The rest before I hand the files over.</li>
       <li>I build it, you get a video of it working, then you get the files.</li>
       <li>Tweaks to what I built are on me. New features are a separate job.</li>
     </ol>
@@ -518,9 +611,8 @@ end)</code></pre>
       <div><b>Roblox</b><a href="https://www.roblox.com/users/3204366457/profile" target="_blank" rel="noopener">W_Katana</a></div>
     </div>
     <div class="note">
-      <strong>Payment.</strong> Per task, paid as each one ships, half up front on the first. Card through
-      Payoneer, crypto, or bank transfer. I'm in Ukraine, so PayPal goods and services doesn't reach me, tell
-      me early and we'll pick something that does. Robux is fine at my rate, roughly 25k per system. Happy to
+      <strong>Payment.</strong> Per task, paid as each one ships, up front on small jobs. PayPal, card
+      through Payoneer, crypto, or bank transfer. Robux is fine at my rate. Happy to
       use a middleman for a first job. No rev share, no "pay after launch".
     </div>
   </div>
@@ -528,7 +620,7 @@ end)</code></pre>
 
 <footer>
   <div class="wrap">
-    aleksandr.yrch — Roblox systems scripter. Available now.
+    aleksandr.yrch · Roblox systems scripter. Available now.
     <a href="#contact">Get in touch</a>.
   </div>
 </footer>
